@@ -6,7 +6,8 @@ object MoveUp {
 
   case class ItemToMoveUp(x: Int, position: Int)
 
-  def getPage(xs: Seq[Int], pageParam: PageParam): Seq[Int] = ???
+  def getPage(xs: Seq[Int], pageParam: PageParam): Seq[Int] =
+    xs.slice(pageParam.offset, pageParam.offset + pageParam.limit)
 
   def getPageAndMoveUp(xs: Seq[Int], pageParam: PageParam, itemToMoveUp: ItemToMoveUp): Seq[Int] = ???
 }
