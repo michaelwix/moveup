@@ -2,12 +2,21 @@ package com.wixpress.appmarket.playground
 
 object MoveUp {
 
-  case class PageParam(offset: Int, limit: Int)
+  def moveUp(xs: Seq[Int], x: Int, pos: Int): Seq[Int] = {
+    val (front, back) = xs.splitAt(pos)
+    front ++ Seq(x) ++ (if (back.contains(x)) back.filter(_ != x) else back.dropRight(1))
+  }
 
-  case class ItemToMoveUp(x: Int, position: Int)
+  def shiftTo(xs: Seq[Int], offset: Int, limit: Int, x: Int): Seq[Int] = {
+    val slice = xs.slice(offset - 1, offset + limit)
+    val (front, back) = slice.span(_ != x)
+    front ++ back.drop(1)
+  }
 
-  def getPage(xs: Seq[Int], pageParam: PageParam): Seq[Int] =
-    xs.slice(pageParam.offset, pageParam.offset + pageParam.limit)
-
-  def getPageAndMoveUp(xs: Seq[Int], pageParam: PageParam, itemToMoveUp: ItemToMoveUp): Seq[Int] = ???
+  def getPageAndMoveUp(xs: Seq[Int], offset: Int, limit: Int, x: Int, pos: Int): Seq[Int] = {
+    if ((offset until offset + limit).contains(pos)) {
+      val page = xs.slice(offset, offset + limit)
+      moveUp(page, x, pos)
+    } else shiftTo(xs, offset, limit, x)
+  }
 }
